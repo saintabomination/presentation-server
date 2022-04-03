@@ -19,10 +19,12 @@ io.on('connection', socket => {
 
   socket.on('move_slide', data => {
     console.log(`${socket.id}: Move Slide (${data})`);
+    io.emit('move_slide', data);
   });
 
   socket.on('reset_presentation', () => {
     console.log(`${socket.id}: Reset Presentation`);
+    io.emit('reset_presentation');
   });
 
   socket.on('disconnect', () => {
