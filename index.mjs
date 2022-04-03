@@ -17,14 +17,19 @@ app.use(cors());
 io.on('connection', socket => {
   console.log(`${socket.id}: Join`);
 
-  socket.on('move_slide', data => {
-    console.log(`${socket.id}: Move Slide (${data})`);
-    io.emit('move_slide', data);
+  socket.on('join_presentation', data => {
+    socket.join(data);
+    console.log(`${socket.id}: ${data}`);
   });
 
-  socket.on('reset_presentation', () => {
+  socket.on('move_slide', ({ data, room }) => {
+    console.log(`${socket.id}: Move Slide (${data})`);
+    io.to(`${room}`).emit('move_slide', data);
+  });
+
+  socket.on('reset_presentation', ({ room }) => {
     console.log(`${socket.id}: Reset Presentation`);
-    io.emit('reset_presentation');
+    io.to(`${room}`).emit('reset_presentation');
   });
 
   socket.on('disconnect', () => {
