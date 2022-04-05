@@ -19,7 +19,12 @@ io.on('connection', socket => {
 
   socket.on('join_presentation', data => {
     socket.join(data);
-    console.log(`${socket.id}: ${data}`);
+    console.log(`${socket.id}: Join Presentation`);
+  });
+
+  socket.on('leave_presentation', data => {
+    socket.leave(data);
+    console.log(`${socket.id}: Leave Presentation`);
   });
 
   socket.on('move_slide', ({ data, room }) => {
