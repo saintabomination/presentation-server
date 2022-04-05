@@ -14,6 +14,56 @@ const io = new Server(httpServer, {
 
 app.use(cors());
 
+// Sample Presentation JSON
+const presentation = {
+  slides: [
+    {
+      title: 'Intro',
+    },
+    {
+      title: 'Slide 1',
+      points: [
+        'Point 1',
+        'Point 2',
+        'Point 3',
+        'Point 4',
+        'Point 5',
+      ],
+    },
+    {
+      title: 'Slide 2',
+      points: [
+        'Point 1',
+        'Point 2',
+        'Point 3',
+      ],
+    },
+    {
+      title: 'Slide 3',
+      points: [
+        'Point 1',
+        'Point 2',
+        'Point 3',
+        'Point 4',
+      ],
+    },
+    {
+      title: 'Slide 4',
+      points: [
+        'Point 1',
+        'Point 2',
+        'Point 3',
+        'Point 4',
+        'Point 5',
+      ],
+    },
+  ],
+};
+
+const hostedPresentations = [
+  { id: 1, presentation: presentation },
+];
+
 io.on('connection', socket => {
   console.log(`${socket.id}: Join`);
 
@@ -43,5 +93,18 @@ io.on('connection', socket => {
 });
 
 httpServer.listen(port, () => {
-  console.log(`Listening on port ${port}...`);
+  console.log(`Socket.io listening on port ${port}...`);
+});
+
+app.listen(port + 1, () => {
+  console.log(`Server listening on port ${port + 1}...`);
+});
+
+app.get('/get_presentation', (req, res) => {
+  const result = hostedPresentations.filter(
+    presentation =>
+    presentation.id == req.query.id
+  );
+
+  if (result) res.send(result[0]);
 });
